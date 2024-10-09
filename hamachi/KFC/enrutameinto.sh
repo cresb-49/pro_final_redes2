@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Debemos de configurar la ruta a la red interna 192.168.25.0/24 por la interzafaz enx00e04c360afb por la ip 11.11.11.1
-sudo ip route add 192.128.25.0/24 via 11.11.11.1 dev enx00e04c360afb
+sudo ip route add 192.168.25.0/24 via 11.11.11.1 dev enx00e04c360afb
 
 # En PC3 (11.11.11.2)
 sudo iptables -t nat -A POSTROUTING -o wlp0s20f3 -j MASQUERADE
