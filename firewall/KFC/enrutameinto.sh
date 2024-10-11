@@ -12,3 +12,8 @@ sudo iptables -A FORWARD -i enp1s0 -o enx00e04c360714 -m state --state RELATED,E
 sudo ip route del default
 # Configurar la ruta predeterminada en PC2 para que apunte hacia PC3
 sudo ip route add default via 11.11.11.2 dev enp1s0
+
+#Configuracion para wordpress
+sudo iptables -t nat -A POSTROUTING -o enx00e04c360714 -j MASQUERADE
+sudo iptables -A FORWARD -i enp1s0 -o enx00e04c360714 -j ACCEPT
+sudo iptables -A FORWARD -i enx00e04c360714 -o enp1s0 -m state --state RELATED,ESTABLISHED -j ACCEPT
