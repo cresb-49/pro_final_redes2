@@ -17,3 +17,20 @@ sudo iptables -t nat -A POSTROUTING -o wlp0s20f3 -j MASQUERADE
 sudo iptables -A FORWARD -i enx00e04c360afb -o wlp0s20f3 -j ACCEPT
 # Permitir las respuestas desde internet hacia PC2
 sudo iptables -A FORWARD -i wlp0s20f3 -o enx00e04c360afb -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+# CONFIGURAR ROUTING DE RED HAMACHI
+
+# Anterior --------------------------------------------------------------------------------------------
+#sudo iptables -t nat -A POSTROUTING -o ham0 -j MASQUERADE
+#sudo iptables -A FORWARD -i ham0 -o enx00e04c360afb -j ACCEPT
+#sudo iptables -A FORWARD -i enx00e04c360afb -o ham0 -j ACCEPT
+# -----------------------------------------------------------------------------------------------------
+
+# Redirigir tráfico HTTP (puerto 80) desde la interfaz ham0 hacia 192.168.25.3
+sudo iptables -t nat -A PREROUTING -i ham0 -p tcp --dport 80 -j DNAT --to-destination 192.168.25.3:80
+
+# Permitir el reenvío de tráfico de la interfaz ham0 hacia la red local
+sudo iptables -A FORWARD -i ham0 -o enx00e04c360afb -p tcp --dport 80 -d 192.168.25.3 -j ACCEPT
+
+# Habilitar el enmascaramiento (NAT) para que las respuestas salgan correctamente a Hamachi
+sudo iptables -t nat -A POSTROUTING -o ham0 -j MASQUERADE
