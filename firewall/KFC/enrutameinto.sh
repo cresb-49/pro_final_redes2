@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# En PC2 (Firewall) 
-sudo iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE
+# En PC2 (Firewall)
+#sudo iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE
 
 # Permitir tráfico desde PC1 (enx00e04c360714) hacia PC3 (enp1s0)
 sudo iptables -A FORWARD -i enx00e04c360714 -o enp1s0 -j ACCEPT
