@@ -20,6 +20,7 @@ sudo iptables -A FORWARD -i wlp0s20f3 -o enx00e04c360afb -m state --state RELATE
 
 # CONFIGURAR PROXY SQUID
 sudo iptables -t nat -A PREROUTING -i enx00e04c360afb -p tcp --dport 80 -j REDIRECT --to-port 3128
+sudo iptables -t nat -A PREROUTING -i enx00e04c360afb -p tcp --dport 443 -j REDIRECT --to-port 3129
 
 # CONFIGURAR ROUTING DE RED HAMACHI
 
