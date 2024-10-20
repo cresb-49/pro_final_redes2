@@ -12,16 +12,16 @@ sudo iptables -t raw -X    # Elimina todas las cadenas personalizadas en la tabl
 sudo iptables -t security -F # Elimina todas las reglas en la tabla security
 sudo iptables -t security -X # Elimina todas las cadenas personalizadas en la tabla security
 
-# Bloquea todo el tráfico de entrada y salida inicialmente
-sudo iptables -P INPUT DROP
-sudo iptables -P OUTPUT DROP
-sudo iptables -P FORWARD DROP
-
-# Permite el tráfico de loopback (necesario para el sistema)
-sudo iptables -A INPUT -i lo -j ACCEPT
-sudo iptables -A OUTPUT -o lo -j ACCEPT
+sudo iptables -P INPUT ACCEPT
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -P OUTPUT ACCEPT
 
 # Guardar las reglas de iptables
 sudo iptables-save > /etc/iptables/rules.v4
+sudo iptables-save > /etc/iptables/rules.v6
 
-echo "Politica todo cerrado activa."
+echo "Reglas de iptables reiniciadas."
+
+sudo ip link set wlp4s0 down
+sudo ip route del default
+sudo ip route add default via 192.168.1.2 dev enx00e04c360131

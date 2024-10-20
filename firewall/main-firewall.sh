@@ -26,12 +26,11 @@ initialize_firewall() {
     
     
     #REGLAS DE FORWARDING
-    sudo iptables -t nat -A POSTROUTING -o enx00e04c360131 -j MASQUERADE
-    sudo iptables -A FORWARD -i enx00e04c360117 -o enx00e04c360131 -j ACCEPT
-    sudo iptables -A FORWARD -i enx00e04c360131 -o enx00e04c360117 -m state --state RELATED,ESTABLISHED -j ACCEPT
-    sudo iptables -t nat -A POSTROUTING -o enx00e04c360117 -j MASQUERADE
-    sudo iptables -A FORWARD -i enx00e04c360131 -o enx00e04c360117 -j ACCEPT
-    sudo iptables -A FORWARD -i enx00e04c360117 -o enx00e04c360131 -m state --state RELATED,ESTABLISHED -j ACCEPT
+   # sudo iptables -A FORWARD -i enx00e04c360117 -o enx00e04c360131 -j ACCEPT
+   # sudo iptables -A FORWARD -i enx00e04c360131 -o enx00e04c360117 -m state --state RELATED,ESTABLISHED -j ACCEPT
+   # sudo iptables -t nat -A POSTROUTING -o enx00e04c360117 -j MASQUERADE
+   # sudo iptables -A FORWARD -i enx00e04c360131 -o enx00e04c360117 -j ACCEPT
+   # sudo iptables -A FORWARD -i enx00e04c360117 -o enx00e04c360131 -m state --state RELATED,ESTABLISHED -j ACCEPT
 
     # Bloquear todas las MACs en INPUT y FORWARD por defecto
     iptables -P INPUT DROP
