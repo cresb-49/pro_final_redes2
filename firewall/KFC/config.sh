@@ -14,3 +14,10 @@ iface enx00e04c360714 inet static
 EOL
 
 sudo systemctl restart networking.service
+
+cat << EOL | sudo tee /etc/resolv.conf > /dev/null
+
+servername 8.8.8.8
+servername 8.8.4.4
+
+EOL
