@@ -138,6 +138,65 @@ init_fire() {
     echo "TODO CERRADO"
 }
 
+reinicio_iptables(){
+    # Elimina todas las reglas de la tabla filter, que es la tabla predeterminada en iptables
+    sudo iptables -F        # Elimina todas las reglas en la tabla filter
+
+    # Elimina todas las cadenas personalizadas en la tabla filter
+    sudo iptables -X        # Elimina todas las cadenas personalizadas en la tabla filter
+
+    # Elimina todas las reglas en la tabla nat, utilizada para la traducción de direcciones de red (NAT)
+    sudo iptables -t nat -F # Elimina todas las reglas en la tabla nat
+
+    # Elimina todas las cadenas personalizadas en la tabla nat
+    sudo iptables -t nat -X # Elimina todas las cadenas personalizadas en la tabla nat
+
+    # Elimina todas las reglas en la tabla mangle, utilizada para modificar campos específicos de los paquetes IP
+    sudo iptables -t mangle -F # Elimina todas las reglas en la tabla mangle
+
+    # Elimina todas las cadenas personalizadas en la tabla mangle
+    sudo iptables -t mangle -X # Elimina todas las cadenas personalizadas en la tabla mangle
+
+    # Elimina todas las reglas en la tabla raw, que se utiliza principalmente para decisiones de seguimiento de conexiones
+    sudo iptables -t raw -F    # Elimina todas las reglas en la tabla raw
+
+    # Elimina todas las cadenas personalizadas en la tabla raw
+    sudo iptables -t raw -X    # Elimina todas las cadenas personalizadas en la tabla raw
+
+    # Elimina todas las reglas en la tabla security, utilizada para aplicar políticas de seguridad adicionales (como SELinux)
+    sudo iptables -t security -F # Elimina todas las reglas en la tabla security
+
+    # Elimina todas las cadenas personalizadas en la tabla security
+    sudo iptables -t security -X # Elimina todas las cadenas personalizadas en la tabla security
+
+    # Establece la política predeterminada para las reglas INPUT (entrantes) a ACCEPT (aceptar todo el tráfico entrante)
+    sudo iptables -P INPUT ACCEPT
+
+    # Establece la política predeterminada para las reglas FORWARD (reenviadas) a ACCEPT (aceptar todo el tráfico reenviado)
+    sudo iptables -P FORWARD ACCEPT
+
+    # Establece la política predeterminada para las reglas OUTPUT (salientes) a ACCEPT (aceptar todo el tráfico saliente)
+    sudo iptables -P OUTPUT ACCEPT
+
+    # Guardar las reglas actuales de iptables en el archivo rules.v4 (para IPv4)
+    sudo iptables-save > /etc/iptables/rules.v4
+
+    # Guardar las reglas actuales de iptables en el archivo rules.v6 (para IPv6)
+    sudo iptables-save > /etc/iptables/rules.v6
+
+    # Baja la interfaz de red wlp2s0 (desactiva el adaptador inalámbrico)
+    sudo ip link set wlp2s0 down
+
+    # Elimina la ruta predeterminada actual (elimina la puerta de enlace predeterminada)
+    sudo ip route del default
+
+    # Agrega una nueva ruta predeterminada, definiendo una puerta de enlace específica para la red via 11.11.11.2 usando la interfaz enp1s0
+    sudo ip route add default via 11.11.11.2 dev enp1s0
+
+    echo "Reglas del firewall descartadas."
+
+}
+
 # Función para mostrar el menú interactivo con selección numérica
 menu() {
     while true; do
@@ -145,8 +204,9 @@ menu() {
         echo "1. Inicializacion"
         echo "2. Permitir conexiones"
         echo "3. Bloquear conexiones"
-        echo "4. Salir"
-        echo -n "Elige una opción (1-4): "
+        echo "4. Reiniciar iptables"
+        echo "5. Salir"
+        echo -n "Elige una opción (1-5): "
         read opcion
 
         case $opcion in
@@ -165,6 +225,10 @@ menu() {
                 break
                 ;;
             4)
+                reinicio_iptables
+                exit 0
+                ;;  
+            5)
                 echo "Saliendo..."
                 exit 0
                 ;;
@@ -179,9 +243,5 @@ menu() {
     ip6tables-save > /etc/iptables/rules.v6
 }
 
-# Ejecutar el menú interactivo
 menu
 
-# # Guardar las reglas de iptables
-# iptables-save > /etc/iptables/rules.v4
-# ip6tables-save > /etc/iptables/rules.v6
