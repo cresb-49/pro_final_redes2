@@ -94,11 +94,13 @@ menu() {
                 tc qdisc del dev enx00e04c360714 root 2>/dev/null
                 tc qdisc del dev enx00e04c360714 ingress 2>/dev/null
                 aplicar_conf
+                exit 0
                 ;;
             2)
                 tc qdisc del dev enx00e04c360714 root 2>/dev/null
                 tc qdisc del dev enx00e04c360714 ingress 2>/dev/null
                 echo "Configuración restaurada."
+                exit 0
                 ;;
             3)
                 echo "Saliendo..."
