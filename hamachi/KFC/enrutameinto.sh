@@ -20,7 +20,7 @@ sudo iptables -A FORWARD -i wlp0s20f3 -o enx00e04c360afb -m state --state RELATE
 
 # CONFIGURAR PROXY SQUID
 sudo iptables -t nat -A PREROUTING -i enx00e04c360afb -p tcp --dport 80 -j REDIRECT --to-port 3128
-sudo iptables -t nat -A PREROUTING -i enx00e04c360afb -p tcp --dport 443 -j REDIRECT --to-port 3129
+sudo iptables -t nat -A PREROUTING -i enx00e04c360afb -p tcp --dport 443 -j REDIRECT --to-port 3128
 
 # CONFIGURAR ROUTING DE RED HAMACHI
 
@@ -31,10 +31,10 @@ sudo iptables -t nat -A PREROUTING -i enx00e04c360afb -p tcp --dport 443 -j REDI
 # -----------------------------------------------------------------------------------------------------
 
 # Redirigir tráfico HTTP (puerto 80) desde la interfaz ham0 hacia 192.168.25.3
-#sudo iptables -t nat -A PREROUTING -i ham0 -p tcp --dport 80 -j DNAT --to-destination 192.168.25.3:80
+sudo iptables -t nat -A PREROUTING -i ham0 -p tcp --dport 80 -j DNAT --to-destination 192.168.25.100:80
 
 # Permitir el reenvío de tráfico de la interfaz ham0 hacia la red local
-#sudo iptables -A FORWARD -i ham0 -o enx00e04c360afb -p tcp --dport 80 -d 192.168.25.3 -j ACCEPT
+sudo iptables -A FORWARD -i ham0 -o enx00e04c360afb -p tcp --dport 80 -d 192.168.25.100 -j ACCEPT
 
 # Habilitar el enmascaramiento (NAT) para que las respuestas salgan correctamente a Hamachi
-#sudo iptables -t nat -A POSTROUTING -o ham0 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -o ham0 -j MASQUERADE
